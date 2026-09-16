@@ -1,0 +1,23 @@
+# Arquivos gerados pela compilacao em C
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dll
+*.exe
+*.out
+
+# Diretorios de build
+build/
+dist/
+bin/
+obj/
+
+# Configuracoes locais do VS Code
+.vscode/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+desktop.ini
