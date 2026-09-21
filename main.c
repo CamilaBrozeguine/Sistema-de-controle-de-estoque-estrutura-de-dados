@@ -5,25 +5,32 @@
 void exibir_menu(void) {
     printf("\n=== CONTROLE DE ESTOQUE ===\n");
     printf("1 - Listar produtos\n");
-    printf("2 - Exibir total em estoque (com tributos)\n");    printf("0 - Sair\n");
+    printf("2 - Exibir valor total em estoque\n");
+    printf("3 - Exibir total com desconto a vista\n");
+    printf("0 - Sair\n");
     printf("Escolha uma opcao: ");
 }
 
 void listar_produtos(Produto lista[], int total) {
     printf("\n--- Produtos Cadastrados ---\n");
     for (int i = 0; i < total; i++) {
-        // BUG: esqueceram de imprimir o ID e a quebra de linha está inadequada
-        printf("Nome: %s | Preco: R$ %.2f | Qtd: %d", lista[i].nome, lista[i].preco, lista[i].quantidade);
+        printf("ID: %d | Categoria: %s | Nome: %s | Preco: R$ %.2f | Qtd: %d\n",
+               lista[i].id,
+               lista[i].categoria,
+               lista[i].nome,
+               lista[i].preco,
+               lista[i].quantidade);
     }
 }
 
 float calcular_total(Produto lista[], int total) {
     float soma = 0.0;
+
     for (int i = 0; i < total; i++) {
-        // BUG: calculo multiplicando errado e nao aplica taxa
-        soma += lista[i].preco * lista[i].quantidade;
+        soma += lista[i].preco;
     }
-    return soma+soma*TAXA_PADRAO;
+
+    return soma;
 }
 
 int main(void) {
@@ -41,8 +48,10 @@ int main(void) {
     estoque[1].quantidade = 50;
 
     int opcao = -1;
+
     while (opcao != 0) {
         exibir_menu();
+
         if (scanf("%d", &opcao) != 1) {
             break;
         }
@@ -51,12 +60,25 @@ int main(void) {
             case 1:
                 listar_produtos(estoque, total_produtos);
                 break;
+
             case 2:
-                printf("\nTotal em estoque: R$ %.2f\n", calcular_total(estoque, total_produtos));
+                printf("\nTotal em estoque: R$ %.2f\n",
+                       calcular_total(estoque, total_produtos));
                 break;
+
+            case 3: {
+                float total = calcular_total(estoque, total_produtos);
+                float total_desconto = aplicar_desconto(total);
+
+                printf("\nTotal a vista com desconto: R$ %.2f\n",
+                       total_desconto);
+                break;
+            }
+
             case 0:
                 printf("\nEncerrando o programa...\n");
                 break;
+
             default:
                 printf("\nOpcao invalida!\n");
                 break;
@@ -64,4 +86,8 @@ int main(void) {
     }
 
     return 0;
+}
+
+float aplicar_desconto(float total) {
+    return total - (total * TAXA_DESCONTO);
 }
